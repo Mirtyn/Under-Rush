@@ -8,11 +8,12 @@ using System;
 public class CoordinateLabeler : MonoBehaviour
 {
     TextMeshPro label;
-    Vector2Int tileCoordinates;
+    Vector2Int tileCoordinates = new Vector2Int();
 
     void Awake()
     {
         label = GetComponent<TextMeshPro>();
+        DisplayCoordinates();
     }
 
     void Update()
@@ -20,18 +21,20 @@ public class CoordinateLabeler : MonoBehaviour
         if (!Application.isPlaying)
         {
             DisplayCoordinates();
+            UpdateTileName();
         }
-
-        CalculateCoordinates();
-    }
-
-    void CalculateCoordinates()
-    {
-        
     }
 
     void DisplayCoordinates()
     {
-        label.text = "--, --";
+        tileCoordinates.x = Mathf.RoundToInt(transform.parent.position.x / UnityEditor.EditorSnapSettings.move.x);
+        tileCoordinates.y = Mathf.RoundToInt(transform.parent.position.z / UnityEditor.EditorSnapSettings.move.z);
+
+        label.text = tileCoordinates.x.ToString() + ", " + tileCoordinates.y.ToString();
+    }
+
+    void UpdateTileName()
+    {
+        transform.parent.gameObject.name = "Tile: " + tileCoordinates.x.ToString() + ", " + tileCoordinates.y.ToString();
     }
 }
